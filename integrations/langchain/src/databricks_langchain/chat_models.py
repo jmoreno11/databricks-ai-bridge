@@ -307,7 +307,6 @@ class ChatDatabricks(BaseChatModel):
             )
             for choice in response["choices"]
         ]
-        usage = response.get("usage", {})
         llm_output = {
             "token_usage": response.get("usage", {}),
             "model_name": response.get("model", self.model),
