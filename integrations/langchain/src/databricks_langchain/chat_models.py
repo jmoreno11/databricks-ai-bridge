@@ -308,10 +308,11 @@ class ChatDatabricks(BaseChatModel):
             for choice in response["choices"]
         ]
         llm_output = {
-            "token_usage": response.get("usage", {}),
-            "model_name": response.get("model", self.model),
-            "system_fingerprint": response.get("system_fingerprint", ""),
+            k: v for k, v in response.items() if k not in ("choices", "content", "role", "type")
         }
+        if "model" in llm_output and "model_name" not in llm_output:
+            llm_output["model_name"] = llm_output["model"]
+        
         return ChatResult(generations=generations, llm_output=llm_output)
 
     def _stream(
