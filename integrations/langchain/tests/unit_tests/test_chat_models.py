@@ -349,17 +349,17 @@ def test_convert_message_to_dict_function() -> None:
 
 def test_convert_response_to_chat_result_llm_output(llm: ChatDatabricks) -> None:
     """Test that _convert_response_to_chat_result correctly sets llm_output."""
-    
+
     result = llm._convert_response_to_chat_result(_MOCK_CHAT_RESPONSE)
-    
+
     # Verify that llm_output contains the full response metadata
     assert "model_name" in result.llm_output
     assert "usage" in result.llm_output
     assert result.llm_output["model_name"] == _MOCK_CHAT_RESPONSE["model"]
-    
+
     # Verify that usage information is included directly in llm_output
     assert result.llm_output["usage"] == _MOCK_CHAT_RESPONSE["usage"]
-    
+
     # Verify that choices, content, role, and type are excluded from llm_output
     assert "choices" not in result.llm_output
     assert "content" not in result.llm_output
