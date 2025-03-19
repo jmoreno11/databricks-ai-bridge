@@ -4,12 +4,6 @@ import json
 
 import mlflow  # type: ignore # noqa: F401
 import pytest
-from databricks_langchain.chat_models import (
-    ChatDatabricks,
-    _convert_dict_to_message,
-    _convert_dict_to_message_chunk,
-    _convert_message_to_dict,
-)
 from langchain_core.messages import (
     AIMessage,
     AIMessageChunk,
@@ -27,6 +21,12 @@ from langchain_core.messages.tool import ToolCallChunk
 from langchain_core.runnables import RunnableMap
 from pydantic import BaseModel, Field
 
+from databricks_langchain.chat_models import (
+    ChatDatabricks,
+    _convert_dict_to_message,
+    _convert_dict_to_message_chunk,
+    _convert_message_to_dict,
+)
 from tests.utils.chat_models import (  # noqa: F401
     _MOCK_CHAT_RESPONSE,
     _MOCK_STREAM_RESPONSE,
