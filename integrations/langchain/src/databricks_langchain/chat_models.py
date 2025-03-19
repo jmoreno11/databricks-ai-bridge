@@ -18,6 +18,7 @@ from typing import (
     Union,
 )
 
+from databricks_langchain.utils import get_deployment_client
 from langchain_core.callbacks import CallbackManagerForLLMRun
 from langchain_core.language_models import BaseChatModel
 from langchain_core.language_models.base import LanguageModelInput
@@ -53,8 +54,6 @@ from langchain_core.utils.function_calling import convert_to_openai_tool
 from langchain_core.utils.pydantic import is_basemodel_subclass
 from mlflow.deployments import BaseDeploymentClient  # type: ignore
 from pydantic import BaseModel, ConfigDict, Field
-
-from databricks_langchain.utils import get_deployment_client
 
 logger = logging.getLogger(__name__)
 
@@ -307,12 +306,12 @@ class ChatDatabricks(BaseChatModel):
             )
             for choice in response["choices"]
         ]
-        usage = response.get("usage", {})
         llm_output = {
-            "token_usage": response.get("usage", {}),
-            "model_name": response.get("model", self.model),
-            "system_fingerprint": response.get("system_fingerprint", ""),
+            k: v for k, v in response.items() if k not in ("choices", "content", "role", "type")
         }
+        if "model" in llm_output and "model_name" not in llm_output:
+            llm_output["model_name"] = llm_output["model"]
+        
         return ChatResult(generations=generations, llm_output=llm_output)
 
     def _stream(
